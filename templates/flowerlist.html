@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+{% block contentone %}
+
+
+<ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+         {% if customerName %}
+
+     					 <a class="dropdown-toggle" name="login" value="login" data-toggle="dropdown" href="#">Hello,{{customerName}} <span class="caret"></span></a>
+     			{% else %}
+     					 <a class="dropdown-toggle" name="login" value="login" data-toggle="dropdown" href="#">Hello, please signin <span class="caret"></span></a>
+				{% endif %}
+      						<ul class="dropdown-menu">
+      					{% if customerName %}
+        						<li><a href="{% url 'signout' %}">Sign Out</a></li>
+        				{% else%}
+        						<li><li><a href="{% url 'signin' %}">Sign In</a></li>
+        						<li><a href="{% url 'register' %}">Register</a></li>  
+						{% endif %}
+                   
+      						</ul>
+    				</li> 
+      <li><a href="#about"><span class="glyphicon glyphicon-shopping-cart"></span> Cart: {{cart.get_total_quantity}} items</li>
+    </ul>
+{% endblock %}
+{% block content %}
+
+<form method='POST' action=''>	 {% csrf_token %}
+ {%for product in flowerlove %}	
+ <div class="col-sm-4 col-lg-4 col-md-4">
+                        <div class="thumbnail">
+                            <img style="widows:320px; height:230px"src="{{product.flowerImage.url }}" alt="">
+                            <div class="caption">
+                                <h5 class="pull-right">${{product.flowerprice }}</h5>
+                                <h5><a href="{% url 'flowerID' flowerID=product.flowerID%}">{{product.flowername }}</a>
+                                </h5>
+                                <p> {{product.flowerdescription}}</p>
+                            </div>
+                            <div class="ratings">
+                                <p class="pull-right">31 reviews</p>
+                                <p>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+   {% endfor %}
+
+                    </form>
+{% endblock %}

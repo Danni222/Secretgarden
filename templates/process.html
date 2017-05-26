@@ -1,0 +1,15 @@
+{% extends 'basenobanner.html' %}
+{% load static from staticfiles %}
+{% block content %} 
+<div class="container">
+<div class="row grid-divider">	
+<div class="col-sm-6">
+	<div class="well">
+	       	<h1>Pay using PayPal</h1>  {{ form.render }}
+		
+	</div>
+</div>
+</div>
+</div>
+		
+{% endblock %}

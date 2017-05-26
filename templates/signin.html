@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block contentone %}
+<form method='POST' action=''>	{% csrf_token %}
+
+<ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+         {% if customerName %}
+
+     					 <a class="dropdown-toggle" name="login" value="login" data-toggle="dropdown" href="#">Hello,{{customerName}} <span class="caret"></span></a>
+     			{% else %}
+     					 <a class="dropdown-toggle" name="login" value="login" data-toggle="dropdown" href="#">Hello, please signin <span class="caret"></span></a>
+				{% endif %}
+      						<ul class="dropdown-menu">
+      					{% if customerName %}
+        						<li><a href="{% url 'signout' %}">Sign Out</a></li>
+        				{% else%}
+        						<li><li><a href="{% url 'signin' %}">Sign In</a></li>
+        						<li><a href="{% url 'register' %}">Register</a></li>  
+						{% endif %}
+                   
+      						</ul>
+    				</li> 
+      <li><a href="{% url 'viewshoppingcart'%}"><span class="glyphicon glyphicon-shopping-cart"></span> Cart: {{cart.get_total_quantity}} items</li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+{# Display a form #}
+<form action='' method="post" class="form">
+  {% csrf_token %}
+  {{form.as_p}}
+ <button  type="submit" name="submit" value="Sign In" class="btn btn-lg btn-primary">
+Sign In</button>
+</form>
+{% endblock %}

@@ -1,0 +1,95 @@
+﻿{% extends 'basenobanner.html' %}
+{% load static from staticfiles %}
+{% block contentone %}
+<form method='POST' action=''>	{% csrf_token %}
+
+<ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+         {% if customerName %}
+
+     					 <a class="dropdown-toggle" name="login" value="login" data-toggle="dropdown" href="#">Hello,{{customerName}} <span class="caret"></span></a>
+     			{% else %}
+     					 <a class="dropdown-toggle" name="login" value="login" data-toggle="dropdown" href="#">Hello, please signin <span class="caret"></span></a>
+				{% endif %}
+      						<ul class="dropdown-menu">
+      					{% if customerName %}
+        						<li><a href="{% url 'signout' %}">Sign Out</a></li>
+        				{% else%}
+        						<li><li><a href="{% url 'signin' %}">Sign In</a></li>
+        						<li><a href="{% url 'register' %}">Register</a></li>  
+						{% endif %}
+                   
+      						</ul>
+    				</li> 
+      <li><a href="#about"><span class="glyphicon glyphicon-shopping-cart"></span> Cart: {{cart.get_total_quantity}} items</li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+<form method='POST' action='' enctype='multipart/form-data'> {% csrf_token %}
+ {%for p in productInfo%}
+<div class="col-md-6">
+    <img class="img-responsive" src="{{p.flowerImage.url }}" alt="{{p.flowerImage}}" style="width: 450px; height: 450px">                                      
+</div>
+<div class="col-md-6">
+
+   <h2>{{p.flowername}}</h2>
+
+ <div class="row">
+ <div class="col-md-12">
+  <span class="label label-primary">No. {{p.flowerID}}</span>
+  <span class="monospaced"></span>
+ </div>
+</div><!-- end row -->
+
+<div class="row">
+ <div class="col-md-12">
+ <p></p>
+  <h4 class="description">{{p.flowerdescription}}  </h4>
+ </div>
+</div><!-- end row -->
+<div class="row">
+ <div class="col-md-4">
+  <span class="sr-only">Four out of Five Stars</span>
+  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+  <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+  <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
+  <span class="label label-success">61</span>
+ </div>
+ <div class="col-md-4">
+  <span class="monospaced">Write a Review</span>
+ </div>
+</div><!-- end row -->
+
+<div class="row">
+ <div class="col-md-12 bottom-rule">
+  <h2 class="product-price">${{p.flowerprice}}</h2>
+ </div>
+</div><!-- end row -->
+
+<p></p>
+<div class="row">
+ <div class="col-md-8 product-qty">
+ <p></p>
+
+<p class="lead"><strong>Quantity: </strong> {{form.quantity}}</p>
+</div>
+ <div class="col-md-4">
+<button type="submit" name="submit" value="addtocart" class="btn btn-md btn-danger">
+ <i class="icon-shopping-cart"></i> ADD TO CART </button>	
+ </div>
+</div><!-- end row -->
+
+<div class="row">
+ <div class="col-md-12 top-10">
+  <p>To order more than 30, <a href="tel:18005551212">please call 1-800-555-1212</a></p>
+ </div>
+</div><!-- end row -->
+</div>
+
+{% endfor %}
+</form>
+
+{% endblock %}

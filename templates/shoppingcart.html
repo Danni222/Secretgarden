@@ -1,0 +1,83 @@
+﻿{% extends 'basenobanner.html' %}
+{% load static from staticfiles %}
+{% block contentone %}
+<form method='POST' action=''>	{% csrf_token %}
+
+<ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+         {% if customerName %}
+
+     					 <a class="dropdown-toggle" name="login" value="login" data-toggle="dropdown" href="#">Hello,{{customerName}} <span class="caret"></span></a>
+     			{% else %}
+     					 <a class="dropdown-toggle" name="login" value="login" data-toggle="dropdown" href="#">Hello, please signin <span class="caret"></span></a>
+				{% endif %}
+      						<ul class="dropdown-menu">
+      					{% if customerName %}
+        						<li><a href="{% url 'signout' %}">Sign Out</a></li>
+        				{% else%}
+        						<li><li><a href="{% url 'signin' %}">Sign In</a></li>
+        						<li><a href="{% url 'register' %}">Register</a></li>  
+						{% endif %}
+                   
+      						</ul>
+    				</li> 
+       <li><a href="{% url 'viewshoppingcart'%}"><span class="glyphicon glyphicon-shopping-cart"></span> Cart: {{cart.get_total_quantity}} items</li>
+    </ul></form>
+{% endblock %}
+
+{% block content %}
+
+   {% if cart%}
+  <h1>Your shopping cart</h1>
+
+  <table class="table table-bordered">
+    <thead>
+      <tr class="success">
+        <th></th>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Remove</th>
+        <th>Unit Price</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in cart %}
+        {% with product=item.product %}
+          <tr class="info">
+            <td>
+              <a href="">
+                <img src="{{ product.productimage.url }}" class="img-circle" style="width: 200px; height: 200px"/>
+              </a>
+            </td>
+            <td>{{ product.productname }}</td> <td><form action="{% url 'cart_update' product.productID item.price  %}" method="post">
+              {{ item.update_quantity_form.quantity }}    {{ item.update_quantity_form.update }}   <input type="submit" value="Update">    {% csrf_token %}
+	    </form></td>
+	    <td><a href="{%url 'cart_remove' product.productID %}">Remove</a></td>
+            <td class="num">${{ item.price }}</td>
+            <td class="num">${{ item.total_price }}</td>
+
+          </tr>
+     {% endwith %}
+      {% endfor %}
+      <tr class="success"> <td colspan="5"><h4 class="pull-right"><strong>Total</strong></h4></td>
+          <td ><h4>${{ cart.get_total_price }}</h4></td>
+      </tr>
+    </tbody>
+  </table>
+    <p class="text-right">
+  <a href="{% url 'homepage'%}"> <button class="btn btn-primary" >Continue Shopping</button></a>
+     <a href="{% url 'order_create' %}"><button class="btn btn-danger" >Checkout</button></a>
+  </p>
+  {% else %}
+  
+  	<h1>Your cart is empty!</h1>
+  	  
+ <p class="text-right">
+	<a href="{% url 'homepage'%}" class="btn btn-primary"> Continue Shopping</a>
+     <a href="{% url 'order_create' %}" class="btn btn-danger">Checkout</a>
+  </p>
+
+  {% endif %}
+
+{% endblock %}

@@ -1,0 +1,82 @@
+﻿{% extends 'basenobanner.html' %}
+{% load static from staticfiles %}
+{% block contentone %}
+
+
+<ul class="nav navbar-nav navbar-right">
+      <li class="dropdown">
+         {% if customerName %}
+
+     					 <a class="dropdown-toggle" name="login" value="login" data-toggle="dropdown" href="#">Hello,{{customerName}} <span class="caret"></span></a>
+     			{% else %}
+     					 <a class="dropdown-toggle" name="login" value="login" data-toggle="dropdown" href="#">Hello, please signin <span class="caret"></span></a>
+				{% endif %}
+      						<ul class="dropdown-menu">
+      					{% if customerName %}
+        						<li><a href="{% url 'signout' %}">Sign Out</a></li>
+        				{% else%}
+        						<li><li><a href="{% url 'signin' %}">Sign In</a></li>
+        						<li><a href="{% url 'register' %}">Register</a></li>  
+						{% endif %}
+                   
+      						</ul>
+    				</li> 
+      <li><a href="{% url 'viewshoppingcart'%}"><span class="glyphicon glyphicon-shopping-cart"></span> Cart: {{cart.get_total_quantity}} items</li>
+    </ul>
+{% endblock %}
+
+{% block content %}  
+<h1>Checkout</h1>      
+ {% if cart%}
+
+<div class="container">
+<div class="row grid-divider">	
+<div class="col-sm-6">
+<div class="well">
+
+<form action="." method="post" class="order-form"> 
+	<h3><strong>Please enter your mail address:</strong></h3>	
+	{%if error%}
+	<p>{{error}}</p>
+	{%endif%}
+{{ form.as_p }}    
+<p>
+<button class="btn btn-danger" name="submit" value="Place order" >Place Order
+</button></p>    
+{% csrf_token %}  
+</form>
+</div> 
+</div>
+<div class="col-sm-3">
+<div class="well">
+
+<h3 class="text-success">Your order</h3>    
+<ul> {% for item in cart %}        
+<li class="text-primary">{{ item.quantity }}x {{ item.product.name }} 
+<span class="text-primary">${{ item.total_price }}</span></li>      
+{% endfor %}    
+</ul>    
+<p><h4 class="text-success">Total: ${{ cart.get_total_price }}</h4></p>  
+</div>
+</div>
+</div>
+</div>
+ {% else %}
+<div class="container">
+<div class="row grid-divider">	
+
+ <div class="col-sm-6">
+<div class="well">
+
+
+	<h3 style="color:red">Sorry, there are no items in  the cart</h3>
+	<a href="{% url 'homepage'%}"> <button class="btn btn-primary" >Continue Shopping</button></a>
+
+</div> 
+</div>
+<a href="{% url 'cart_detail'%}">  <button type="submit" name="submit" value="Cart" style="float: right;"class="btn btn-info"><span class="glyphicon glyphicon-shopping-cart"></span> Your cart is empty</button></a>
+ </div> 
+</div>
+
+ {% endif %}
+{% endblock %}
